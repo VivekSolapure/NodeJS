@@ -3,8 +3,10 @@ require('dotenv').config()
 const productrouter=require('./routes/productRouter.js')
 const usertrouter=require('./routes/userRouter.js')
 const express =require('express');
+const path=require('path')
 const server=express();
 const {Schema}=mongoose;
+const cors=require('cors');
 server.use(express.json())
 
 //db connection
@@ -20,12 +22,15 @@ async function main() {
 
 
 //bodyparser
+server.use(cors());
 
 server.use('/products',productrouter.routes);
 server.use('/users',usertrouter.routes);
-
-server.use(express.static(process.env.PUBLIC_DIR))
-console.log(process.env.PASSWORD);
+server.use(express.static(path.resolve(__dirname,process.env.PUBLIC_DIR)))
+server.use('*',(req,res)=>{
+  res.sendFile(path.resolve(__dirname,'build','index.html'))
+})
+// console.log(process.env.PASSWORD);
 server.listen(process.env.PORT,()=>{
     console.log('Server Started');
 })

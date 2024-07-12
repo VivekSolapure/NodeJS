@@ -7,7 +7,7 @@ server.use(express.json());
 
 
 exports.getAllProducts=async(req, res)=>{
-    const product= await Product.findOneAndDelete({'title':'iPhone 9'})
+    const product= await Product.find()
     res.json(product)
 }
 exports.getProduct=async(req, res) =>{
@@ -16,15 +16,16 @@ exports.getProduct=async(req, res) =>{
     res.json(product);
 }
 
-exports.createProduct=(req,res)=>{
+exports.createProduct= async(req,res)=>{
     const product = new Product(req.body)
-    console.log(req.body);
-    
-    product.save().then(()=>{
-        res.status(400).json(req.body)
-    }).catch((err)=>{
-        res.status(201).json(err)
-    })
+
+        product.save().then(()=>{
+            res.status(201).json(req.body)
+            console.log(req.body);
+        }).catch((err)=>{
+            res.status(400).json(err)
+            console.log(err);
+        })
     // res.status(201).json(req.body)
 
 }
